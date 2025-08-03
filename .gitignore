@@ -1,0 +1,9 @@
+# .gitignore
+env/
+*.zip
+__pycache__/
+*.pyc
+node_modules/
+build/
+dist/
+*.log
