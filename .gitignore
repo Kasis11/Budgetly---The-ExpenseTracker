@@ -1,11 +1,18 @@
-# .gitignore
-env/
-*.zip
+# Python
 __pycache__/
 *.pyc
-node_modules/
-build/
-dist/
+*.pyo
+*.pyd
+
+# Virtual env
+env/
+venv/
+
+# Django
+db.sqlite3
 *.log
-# .gitignore
 .env
+
+# Node
+node_modules/
+package-lock.json
