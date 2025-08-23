@@ -31,14 +31,12 @@ class Expense(models.Model):
         return f"{self.note} - ₹{self.amount} ({self.category})"
 
 
-# models.py
 class Budget(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    daily_budget = models.DecimalField(max_digits=10, decimal_places=2)
-    monthly_budget = models.DecimalField(max_digits=10, decimal_places=2)
-    yearly_budget = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # optional
-    notify_on_threshold = models.BooleanField(default=True)  # <-- new field
-
+    daily_budget = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    monthly_budget = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    yearly_budget = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    notify_on_threshold = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.user.username}'s Budget"

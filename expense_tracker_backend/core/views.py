@@ -1,4 +1,5 @@
 
+from urllib import request
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -79,8 +80,15 @@ class BudgetViewSet(viewsets.ModelViewSet):
         except ValueError:
             return Response({"detail": "Amount must be a number."}, status=400)
 
-        budget, _ = Budget.objects.get_or_create(user=request.user)
-
+        budget, _ = Budget.objects.get_or_create(
+            user=request.user,
+            defaults={
+                "daily_budget": 0,
+                "monthly_budget": 0,
+                "yearly_budget": 0,
+            }
+        )
+        
         if period == "daily":
             budget.daily_budget = amount
         elif period == "monthly":
