@@ -26,11 +26,11 @@ services:
   # React Frontend (Static)
   # =========================
   - type: web
-    name: expense-tracker-frontend
+    name: budgetly-frontend
     env: static
-    rootDir: expensetracker_frontend   # ✅ correct field name
+    rootDir: expensetracker_frontend
     buildCommand: "npm install && npm run build"
     staticPublishPath: build
     envVars:
       - key: REACT_APP_API_BASE_URL
-        value: "https://expense-tracker-backend.onrender.com/api/"
+        value: "https://budgetly-the-expensetracker.onrender.com/api/"
