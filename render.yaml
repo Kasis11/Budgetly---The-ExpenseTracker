@@ -5,7 +5,7 @@ services:
   - type: web
     name: expense-tracker-backend
     env: python
-    rootDirectory: expense_tracker_backend   # points to backend folder
+    rootDir: expense_tracker_backend   # ✅ correct field name
     buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
     startCommand: "python manage.py migrate && gunicorn config.wsgi:application"
     envVars:
@@ -28,7 +28,7 @@ services:
   - type: web
     name: expense-tracker-frontend
     env: static
-    rootDirectory: expensetracker_frontend   # points to frontend folder
+    rootDir: expensetracker_frontend   # ✅ correct field name
     buildCommand: "npm install && npm run build"
     staticPublishPath: build
     envVars:
