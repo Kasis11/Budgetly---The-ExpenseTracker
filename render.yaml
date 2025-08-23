@@ -1,5 +1,3 @@
-
-
 services:
   # =========================
   # Django Backend (Python)
@@ -7,7 +5,7 @@ services:
   - type: web
     name: expense-tracker-backend
     env: python
-    rootDirectory: expense_tracker_backend
+    rootDirectory: expense_tracker_backend   # points to backend folder
     buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
     startCommand: "python manage.py migrate && gunicorn config.wsgi:application"
     envVars:
@@ -30,10 +28,9 @@ services:
   - type: web
     name: expense-tracker-frontend
     env: static
-    rootDirectory: expensetracker_frontend
+    rootDirectory: expensetracker_frontend   # points to frontend folder
     buildCommand: "npm install && npm run build"
     staticPublishPath: build
     envVars:
       - key: REACT_APP_API_BASE_URL
         value: "https://expense-tracker-backend.onrender.com/api/"
-
