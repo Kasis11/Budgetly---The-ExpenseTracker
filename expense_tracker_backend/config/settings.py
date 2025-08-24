@@ -17,10 +17,8 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="*").split(",")
 CORS_ALLOWED_ORIGINS = [o for o in config("CORS_ALLOWED_ORIGINS", default="").split(",") if o]
 CSRF_TRUSTED_ORIGINS = [o for o in config("CSRF_TRUSTED_ORIGINS", default="").split(",") if o]
 
-CORS_ALLOW_HEADERS = list(default_headers) + [
-    "content-type",
-    "authorization",
-]
+CORS_ALLOW_HEADERS = list(default_headers) + ["Content-Type", "Authorization"]
+
 CORS_ALLOW_CREDENTIALS = True
 
 # ========================
