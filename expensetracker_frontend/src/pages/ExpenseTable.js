@@ -3,9 +3,9 @@ import { HiAdjustments } from "react-icons/hi";
 import api from "../utils/api";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import ConfirmModal from './ConfirmModal';
+import ConfirmModal from "./ConfirmModal";
 
-const ExpenseTable = ({ expenses, onDelete, onRefresh }) => {
+const ExpenseTable = ({ expenses, onDelete, onRefresh, fetchWallet }) => {
   const [editIndex, setEditIndex] = useState(null);
   const [editedExpense, setEditedExpense] = useState({});
   const [filteredExpenses, setFilteredExpenses] = useState(expenses);
@@ -56,6 +56,8 @@ const ExpenseTable = ({ expenses, onDelete, onRefresh }) => {
       try {
         await api.delete(`/expenses/${deleteTarget.id}/?refund=true`); // always refund if Yes
         onRefresh();
+        fetchWallet();       // <-- add this to refresh wallet balance
+
       } catch (err) {
         console.error("Failed to delete expense:", err);
       }
@@ -370,7 +372,7 @@ const ExpenseTable = ({ expenses, onDelete, onRefresh }) => {
         </table>
       </div>
 
-       <ConfirmModal
+      <ConfirmModal
         open={showConfirm}
         onClose={() => setShowConfirm(false)}
         onConfirm={confirmDelete}

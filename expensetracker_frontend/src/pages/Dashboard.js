@@ -70,23 +70,27 @@ const Dashboard = () => {
     }
   };
 
-  const handleAddExpense = async (expenseData) => {
-    try {
-      await api.post("/expenses/", expenseData);
-      fetchExpenses();
-    } catch (err) {
-      console.error("Failed to add expense:", err);
-    }
-  };
 
-  const handleDelete = async (id) => {
-    try {
-      await api.delete(`/expenses/${id}/`);
-      fetchExpenses();
-    } catch (err) {
-      console.error("Failed to delete expense:", err);
-    }
-  };
+  const handleAddExpense = async (expenseData) => {
+  try {
+    await api.post("/expenses/", expenseData);
+    fetchExpenses(); // refresh expenses
+    fetchWallet();   // refresh wallet balance immediately
+  } catch (err) {
+    console.error("Failed to add expense:", err);
+  }
+};
+
+  const handleDelete = async (id, refund = false) => {
+  try {
+    await api.delete(`/expenses/${id}/?refund=${refund}`);
+    fetchExpenses();
+    fetchWallet(); // update wallet balance immediately
+  } catch (err) {
+    console.error("Failed to delete expense:", err);
+  }
+};
+
 
   useEffect(() => {
   if (localStorage.getItem("access_token")) {
@@ -237,7 +241,9 @@ const Dashboard = () => {
         expenses={expenses}
         onDelete={handleDelete}
         onRefresh={fetchExpenses}
+        fetchWallet={fetchWallet}   // <-- pass wallet refresh
       />
+
 
       {/* Add Expense Modal */}
       {showExpenseModal && (
