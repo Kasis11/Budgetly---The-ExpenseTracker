@@ -1,89 +1,4 @@
-// import React, { useState } from "react";
-// import api from "../utils/api";
 
-// const AddExpense = () => {
-//   const [amount, setAmount] = useState("");
-//   const [category, setCategory] = useState("");
-//   const [customCategory, setCustomCategory] = useState("");
-//   const [note, setNote] = useState("");
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     const finalCategory = category === "Other" ? customCategory : category;
-
-//     try {
-      // await api.post("/expenses/", {
-//         amount,
-//         category: finalCategory,
-//         title: note,
-//       });
-
-//       alert("Expense added successfully!");
-//       setAmount("");
-//       setCategory("");
-//       setCustomCategory("");
-//       setNote("");
-//     } catch (err) {
-//       console.error("Error adding expense:", err.response?.data || err);
-//       alert("Failed to add expense");
-//     }
-//   };
-
-//   return (
-//     <div className="p-6 max-w-md mx-auto">
-//       <h2 className="text-2xl font-bold mb-4">Add Expense</h2>
-//       <form onSubmit={handleSubmit}>
-//         <input
-//           type="number"
-//           placeholder="Amount"
-//           value={amount}
-//           onChange={(e) => setAmount(e.target.value)}
-//           className="w-full border p-2 mb-4 rounded"
-//           required
-//         />
-
-//         <select
-//           value={category}
-//           onChange={(e) => setCategory(e.target.value)}
-//           className="w-full border p-2 mb-4 rounded"
-//           required
-//         >
-//           <option value="" disabled>Select Category</option>
-//           <option value="Breakfast">Breakfast</option>
-//           <option value="Lunch">Lunch</option>
-//           <option value="Dinner">Dinner</option>
-//           <option value="Petrol">Petrol</option>
-//           <option value="Other">Other</option>
-//         </select>
-
-//         {category === "Other" && (
-//           <input
-//             type="text"
-//             placeholder="Enter custom category"
-//             value={customCategory}
-//             onChange={(e) => setCustomCategory(e.target.value)}
-//             className="w-full border p-2 mb-4 rounded"
-//             required
-//           />
-//         )}
-
-//         <input
-//           type="text"
-//           placeholder="Note (optional)"
-//           value={note}
-//           onChange={(e) => setNote(e.target.value)}
-//           className="w-full border p-2 mb-4 rounded"
-//         />
-
-//         <button className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded w-full">
-//           Add Expense
-//         </button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default AddExpense;
 
 import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
@@ -99,38 +14,38 @@ const AddExpenseModal = ({ open, onClose, onRefresh, fetchWallet }) => {
   const categories = ['Lunch', 'Dinner', 'Breakfast', 'Petrol', 'Other'];
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const selectedCategory = category === 'Other' ? customCategory : category;
+  if (!category || !amount || !date) {
+    alert("Please fill all required fields.");
+    return;
+  }
 
-    if (!selectedCategory || !amount || !date) {
-      alert("Please fill all required fields.");
-      return;
-    }
-
-    try {
-      await api.post('/expenses/', {
-        title: selectedCategory,
-        amount: parseFloat(amount),
-        category: selectedCategory,
-        note,
-        date,
-      });
-
-      onRefresh(); // Reload the expense list
-      onClose();   // Close the modal
-      // Clear form
-      setAmount('');
-      setCategory('');
-      setCustomCategory('');
-      setNote('');
-      setDate('');
-      fetchWallet();       
-    } catch (err) {
-      console.error('Failed to add expense:', err);
-      alert('Error adding expense');
-    }
+  const payload = {
+    amount: parseFloat(amount),
+    category: category === 'Other' ? 'Other' : category, // always valid choice
+    note: category === 'Other' ? customCategory : note, // store your "Other" title here
+    date,
   };
+
+  try {
+    await api.post('/expenses/', payload);
+
+    onRefresh();
+    onClose();
+
+    // Clear form
+    setAmount('');
+    setCategory('');
+    setCustomCategory('');
+    setNote('');
+    setDate('');
+    fetchWallet();
+  } catch (err) {
+    console.error('Failed to add expense:', err);
+    alert('Error adding expense');
+  }
+};
 
   return (
     <Dialog open={open} onClose={onClose} className="relative z-50">
