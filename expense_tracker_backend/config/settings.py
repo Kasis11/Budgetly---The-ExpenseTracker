@@ -13,12 +13,28 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="*").split(",")
 
-# CORS / CSRF
-CORS_ALLOWED_ORIGINS = [o for o in config("CORS_ALLOWED_ORIGINS", default="").split(",") if o]
-CSRF_TRUSTED_ORIGINS = [o for o in config("CSRF_TRUSTED_ORIGINS", default="").split(",") if o]
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = list(default_headers) + ["content-type"]
+# # CORS / CSRF
+# CORS_ALLOWED_ORIGINS = [o for o in config("CORS_ALLOWED_ORIGINS", default="").split(",") if o]
+# CSRF_TRUSTED_ORIGINS = [o for o in config("CSRF_TRUSTED_ORIGINS", default="").split(",") if o]
+# CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_HEADERS = list(default_headers) + ["content-type"]
 
+CORS_ALLOW_ALL_ORIGINS = False  # we’ll use only allowed origins
+CORS_ALLOWED_ORIGINS = [
+    "https://budgetly-frontend.onrender.com",  # your React app
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://budgetly-the-expensetracker.onrender.com",
+    "https://budgetly-frontend.onrender.com",
+]
+
+# ✅ Allow content-type + authorization headers
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "content-type",
+    "authorization",
+]
+CORS_ALLOW_CREDENTIALS = True
 
 INSTALLED_APPS = [
     "django.contrib.admin","django.contrib.auth","django.contrib.contenttypes",
