@@ -1,5 +1,3 @@
-
-
 import os
 from pathlib import Path
 from decouple import config
@@ -13,38 +11,39 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="*").split(",")
 
-# # CORS / CSRF
-# CORS_ALLOWED_ORIGINS = [o for o in config("CORS_ALLOWED_ORIGINS", default="").split(",") if o]
-# CSRF_TRUSTED_ORIGINS = [o for o in config("CSRF_TRUSTED_ORIGINS", default="").split(",") if o]
-# CORS_ALLOW_CREDENTIALS = True
-# CORS_ALLOW_HEADERS = list(default_headers) + ["content-type"]
+# ========================
+# ✅ CORS / CSRF settings
+# ========================
+CORS_ALLOWED_ORIGINS = [o for o in config("CORS_ALLOWED_ORIGINS", default="").split(",") if o]
+CSRF_TRUSTED_ORIGINS = [o for o in config("CSRF_TRUSTED_ORIGINS", default="").split(",") if o]
 
-CORS_ALLOW_ALL_ORIGINS = False  # we’ll use only allowed origins
-CORS_ALLOWED_ORIGINS = [
-    "https://budgetly-frontend.onrender.com",  # your React app
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://budgetly-the-expensetracker.onrender.com",
-    "https://budgetly-frontend.onrender.com",
-]
-
-# ✅ Allow content-type + authorization headers
 CORS_ALLOW_HEADERS = list(default_headers) + [
     "content-type",
     "authorization",
 ]
 CORS_ALLOW_CREDENTIALS = True
 
+# ========================
+# Installed apps
+# ========================
 INSTALLED_APPS = [
-    "django.contrib.admin","django.contrib.auth","django.contrib.contenttypes",
-    "django.contrib.sessions","django.contrib.messages","django.contrib.staticfiles",
-    "rest_framework","corsheaders","core",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "rest_framework",
+    "corsheaders",
+    "core",
 ]
 
+# ========================
+# Middleware
+# ========================
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # directly after SecurityMiddleware
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # must be right after SecurityMiddleware
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -54,39 +53,50 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-
 ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
 
+# ========================
+# Templates (needed for admin)
+# ========================
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],  # optional
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],  # optional
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
+# ========================
+# REST Framework
+# ========================
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework_simplejwt.authentication.JWTAuthentication"],
 }
 
-# DB: Postgres via DATABASE_URL; else fallback to SQLite
+# ========================
+# Database (Render uses DATABASE_URL)
+# ========================
 DATABASES = {
     "default": dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}", conn_max_age=600, ssl_require=False
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+        ssl_require=False,
     )
 }
 
-# Static files (Render + WhiteNoise)
+# ========================
+# Static files
+# ========================
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
