@@ -3,7 +3,7 @@
   env: python
   rootDir: expense_tracker_backend
   buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
-  startCommand: "python manage.py migrate --fake-initial && gunicorn config.wsgi:application"
+  startCommand: "python manage.py migrate && gunicorn config.wsgi:application"
   envVars:
     - key: DJANGO_SETTINGS_MODULE
       value: config.settings
