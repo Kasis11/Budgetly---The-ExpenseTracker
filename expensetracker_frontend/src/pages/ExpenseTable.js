@@ -14,6 +14,9 @@ const ExpenseTable = ({ expenses, onDelete, onRefresh }) => {
 
   const categoryOptions = ["Breakfast", "Lunch", "Dinner", "Petrol", "Other"];
 
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+
   // Filtering logic
   useEffect(() => {
     let filtered = [...expenses];
@@ -21,12 +24,19 @@ const ExpenseTable = ({ expenses, onDelete, onRefresh }) => {
     if (filterType === "category" && filterValue) {
       filtered = filtered.filter((exp) => exp.category === filterValue);
     } else if (filterType === "startDate" && filterValue) {
-      filtered = filtered.filter((exp) => new Date(exp.date) >= new Date(filterValue));
-    } else if (filterType === "monthYear" && filterValue?.month && filterValue?.year) {
+      filtered = filtered.filter(
+        (exp) => new Date(exp.date) >= new Date(filterValue)
+      );
+    } else if (
+      filterType === "monthYear" &&
+      filterValue?.month &&
+      filterValue?.year
+    ) {
       filtered = filtered.filter((exp) => {
         const date = new Date(exp.date);
         return (
-          (date.getMonth() + 1).toString().padStart(2, "0") === filterValue.month &&
+          (date.getMonth() + 1).toString().padStart(2, "0") ===
+            filterValue.month &&
           date.getFullYear().toString() === filterValue.year
         );
       });
@@ -34,6 +44,24 @@ const ExpenseTable = ({ expenses, onDelete, onRefresh }) => {
 
     setFilteredExpenses(filtered);
   }, [filterType, filterValue, expenses]);
+
+  const handleDeleteClick = (exp) => {
+    setDeleteTarget(exp); // store expense info
+    setShowConfirm(true); // open modal
+  };
+
+  const confirmDelete = async () => {
+    if (deleteTarget) {
+      try {
+        await api.delete(`/expenses/${deleteTarget.id}/?refund=true`); // always refund if Yes
+        onRefresh();
+      } catch (err) {
+        console.error("Failed to delete expense:", err);
+      }
+    }
+    setShowConfirm(false);
+    setDeleteTarget(null);
+  };
 
   const handleEdit = (index) => {
     setEditIndex(index);
@@ -63,10 +91,9 @@ const ExpenseTable = ({ expenses, onDelete, onRefresh }) => {
 
     let reportTitle = "Expenses Report";
     if (filterType === "monthYear" && filterValue?.month && filterValue?.year) {
-      const monthName = new Date(`${filterValue.year}-${filterValue.month}-01`).toLocaleString(
-        "default",
-        { month: "long" }
-      );
+      const monthName = new Date(
+        `${filterValue.year}-${filterValue.month}-01`
+      ).toLocaleString("default", { month: "long" });
       reportTitle += ` - ${monthName} ${filterValue.year}`;
     }
 
@@ -322,7 +349,7 @@ const ExpenseTable = ({ expenses, onDelete, onRefresh }) => {
                       </button>
                       <button
                         className="bg-red-500 text-white px-3 py-1 rounded text-xs"
-                        onClick={() => onDelete(exp.id)}
+                        onClick={() => handleDeleteClick(exp)} // ✅ open modal
                       >
                         Delete
                       </button>
@@ -341,6 +368,13 @@ const ExpenseTable = ({ expenses, onDelete, onRefresh }) => {
           </tbody>
         </table>
       </div>
+
+       <ConfirmModal
+        open={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        onConfirm={confirmDelete}
+        message={`Do you want to refund ₹${deleteTarget?.amount} back to wallet?`}
+      />
     </div>
   );
 };

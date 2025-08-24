@@ -3,7 +3,7 @@ import axios from "axios";
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL || "http://localhost:8000/api/",
   headers: {
-    "Content-Type": "application/json",   // ✅ Always send JSON
+    "Content-Type": "application/json", // ✅ Always send JSON
   },
 });
 
@@ -33,7 +33,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const res = await axios.post(
-          `${process.env.REACT_APP_API_BASE_URL || "http://localhost:8000/api/"}/token/refresh/`,
+          `${process.env.REACT_APP_API_BASE_URL || "http://localhost:8000/api/"}token/refresh/`,
           { refresh: localStorage.getItem("refresh_token") },
           { headers: { "Content-Type": "application/json" } }
         );
@@ -42,12 +42,16 @@ api.interceptors.response.use(
         localStorage.setItem("access_token", newAccessToken);
 
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return api(originalRequest);
+        return api(originalRequest); // retry the original request
       } catch (refreshError) {
         console.error("Token refresh failed", refreshError);
+
+        // ❌ Clear tokens
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
-        // Optional: redirect to login
+
+        // 🔄 Redirect to login
+        window.location.href = "/login";
       }
     }
 

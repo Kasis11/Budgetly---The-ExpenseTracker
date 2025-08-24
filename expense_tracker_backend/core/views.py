@@ -55,6 +55,20 @@ class ExpenseViewSet(viewsets.ModelViewSet):
         wallet.save()
         serializer.save(user=self.request.user)
 
+    def destroy(self, request, *args, **kwargs):
+        expense = self.get_object()
+        wallet, _ = Wallet.objects.get_or_create(user=request.user)
+
+        # ✅ Check query param: refund=true
+        refund = request.query_params.get("refund", "false").lower() == "true"
+
+        if refund:
+            wallet.balance += expense.amount
+            wallet.save()
+
+        response = super().destroy(request, *args, **kwargs)
+        return response
+
 class BudgetViewSet(viewsets.ModelViewSet):
     serializer_class = BudgetSerializer
     permission_classes = [ReadOnlyOrIsAuthenticated]

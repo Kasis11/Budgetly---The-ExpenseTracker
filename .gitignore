@@ -1,18 +1,26 @@
-# Python
+# Python cache files
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Virtual env
+# Virtual environments
 env/
 venv/
+.venv/
 
 # Django
 db.sqlite3
 *.log
 .env
+staticfiles/
+media/
 
-# Node
+# Node.js (if using frontend)
 node_modules/
 package-lock.json
+yarn.lock
+
+# OS files
+.DS_Store
+Thumbs.db

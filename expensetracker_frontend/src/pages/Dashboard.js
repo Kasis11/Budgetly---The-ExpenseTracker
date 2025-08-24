@@ -89,11 +89,14 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+  if (localStorage.getItem("access_token")) {
     fetchExpenses();
     fetchWallet();
     fetchBudget();
-    checkBudgetAlerts(); // <-- fetch alerts too
-  }, []);
+    checkBudgetAlerts();
+  }
+}, []);
+
 
   return (
     <div className="p-4 space-y-6">
