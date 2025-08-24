@@ -3,6 +3,7 @@ import { HiAdjustments } from "react-icons/hi";
 import api from "../utils/api";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import ConfirmModal from './ConfirmModal';
 
 const ExpenseTable = ({ expenses, onDelete, onRefresh }) => {
   const [editIndex, setEditIndex] = useState(null);
