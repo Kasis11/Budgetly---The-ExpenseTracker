@@ -89,7 +89,7 @@ import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import api from '../utils/api'; // Make sure this path is correct
 
-const AddExpenseModal = ({ open, onClose, onRefresh }) => {
+const AddExpenseModal = ({ open, onClose, onRefresh, fetchWallet }) => {
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
   const [customCategory, setCustomCategory] = useState('');
@@ -125,6 +125,7 @@ const AddExpenseModal = ({ open, onClose, onRefresh }) => {
       setCustomCategory('');
       setNote('');
       setDate('');
+      fetchWallet();       
     } catch (err) {
       console.error('Failed to add expense:', err);
       alert('Error adding expense');

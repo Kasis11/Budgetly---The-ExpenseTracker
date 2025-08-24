@@ -251,6 +251,7 @@ const Dashboard = () => {
           open={showExpenseModal}
           onClose={() => setShowExpenseModal(false)}
           onRefresh={fetchExpenses}
+          fetchWallet={fetchWallet}
         />
       )}
 
