@@ -43,6 +43,9 @@ const ExpenseTable = ({ expenses, onDelete, onRefresh, fetchWallet }) => {
       });
     }
 
+    filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+
     setFilteredExpenses(filtered);
   }, [filterType, filterValue, expenses]);
 
