@@ -81,16 +81,15 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework_simplejwt.authentication.JWTAuthentication"],
 }
 
-# ========================
-# Database (Render uses DATABASE_URL)
-# ========================
 DATABASES = {
     "default": dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        default=config("DATABASE_URL"),
         conn_max_age=600,
-        ssl_require=False,
+        ssl_require=True
     )
 }
+
+
 
 # ========================
 # Static files

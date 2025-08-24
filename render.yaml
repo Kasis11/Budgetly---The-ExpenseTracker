@@ -17,6 +17,8 @@
       value: "https://budgetly-the-expensetracker-frontend.onrender.com"
     - key: CSRF_TRUSTED_ORIGINS
       value: "https://budgetly-the-expensetracker.onrender.com,https://budgetly-the-expensetracker-frontend.onrender.com"
+    - key: DATABASE_URL
+      value: "postgresql://expense_tracker_db_7daq_user:XWK5OXsPEOb1OjhiSU53TJXXmiv6KLtr@dpg-d2g8rkndiees73d7ulug-a/expense_tracker_db_7daq"
 
 - type: web
   name: budgetly-the-expensetracker-frontend
@@ -27,3 +29,4 @@
   envVars:
     - key: REACT_APP_API_BASE_URL
       value: "https://budgetly-the-expensetracker.onrender.com/api/"
+
