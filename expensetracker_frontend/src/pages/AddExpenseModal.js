@@ -24,7 +24,7 @@ const AddExpenseModal = ({ open, onClose, onRefresh, fetchWallet }) => {
   const payload = {
     amount: parseFloat(amount),
     category: category === 'Other' ? 'Other' : category, // always valid choice
-    note: category === 'Other' ? customCategory : note, // store your "Other" title here
+    note: category === 'Other' ? `${note} & ${customCategory}` : note, // store your "Other" title here
     date,
   };
 
