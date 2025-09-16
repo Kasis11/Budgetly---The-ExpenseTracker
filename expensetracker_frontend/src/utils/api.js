@@ -34,11 +34,14 @@ api.interceptors.response.use(
     ) {
       originalRequest._retry = true;
       try {
+        const normalizedBaseURL = baseURL.replace(/\/$/, ""); // remove trailing slash if any
+
         const res = await axios.post(
-          `${baseURL}token/refresh/`,
+          `${normalizedBaseURL}/token/refresh/`,
           { refresh: localStorage.getItem("refresh_token") },
           { headers: { "Content-Type": "application/json" } }
         );
+
 
         const newAccessToken = res.data.access;
         localStorage.setItem("access_token", newAccessToken);
